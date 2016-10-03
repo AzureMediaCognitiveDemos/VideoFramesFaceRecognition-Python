@@ -1,0 +1,108 @@
+#!/bin/sh
+
+cwd=`dirname "$0"`
+expr "$0" : "/.*" > /dev/null || cwd=`(cd "$cwd" && pwd)`
+
+usage() {
+    C=$1
+    echo "USAGE: $1 [WORKFLOW] [BATCH_NAME] [PERSON_GROUP_ID] [BATCH_WORK_DIR]"
+    echo "   WORKFLOW : ALL|REGIST_PEOPLE|GEN_FRAME|IDENTIFY"
+    exit 1;
+}
+
+#################################################################
+# run_regist_people
+#################################################################
+run_regist_people(){
+    _PERSON_GROUP_ID=$1
+    _INPUT_CSV=$2
+    _PEOPLE_MASTER_CSV=$3
+    ${cwd}/regist_persons.py ${_PERSON_GROUP_ID} ${_INPUT_CSV} ${_PERSON_GROUP_ID}
+}
+
+#################################################################
+# run_gen_frame
+#################################################################
+run_gen_frame () {
+    _BATCH_NAME=$1
+    _BATCH_OUTPUT_DIR=$2
+    _FRAME_URLS=$3
+
+    _ASSET_NAME=${_BATCH_NAME}
+    _AMSMP_THUMB_OUT_FILE="${_BATCH_OUTPUT_DIR}/ASSETINFO.txt"
+    AMS_CONF_FILE=$cwd/ams.config
+    AMSMP_THUMB_PARAM_FILE=$cwd/amsmp-thumbnail-config.json
+    AMSMP_BASE_DIR=$cwd/../mediaprocessors/azure-media-processor-java
+
+    cd $AMSMP_BASE_DIR
+    mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -c ${AMS_CONF_FILE}-p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
+    cd ${cwd}
+
+    _STORAGE_CONTAINER=`cat ASSETINFO.txt |grep StorageUrl |awk -F'/' '{print $4}'`
+
+    ${cwd}/gen_frame_urls.py ${_STORAGE_CONTAINER} ${_FRAME_URLS}
+}
+
+#################################################################
+# run_identify_people
+#################################################################
+run_identify_people() {
+    _PERSON_GROUP_ID=$1
+    _FRAME_URLS_FILE=$2
+    _PEOPLE_MASTER_CSV=$3
+    _WEBVTT=$4
+    ${cwd}/identify_persons.py ${_PERSON_GROUP_ID} ${_FRAME_URLS_FILE} ${_PEOPLE_MASTER_CSV} ${_WEBVTT}
+}
+
+
+#################################################################
+# main
+#################################################################
+if [ $# -ne 4 ]
+then
+    usage $0;
+fi
+
+WORKFLOW=$1
+BATCH_NAME=$2
+PERSON_GROUP_ID=$3
+BATCH_WORK_DIR=$4
+
+PEOPLE_INPUT_CSV="${BATCH_WORK_DIR}/peopleinput.csv"
+PEOPLE_MASTER_CSV="${BATCH_WORK_DIR}/peoplemaster.csv"
+FRAME_URLS_FILE="${BATCH_WORK_DIR}/frameurls.txt"
+WEBVTT="${BATCH_WORK_DIR}/{BATCH_NAME}.vtt"
+
+if [ ! -e $BATCH_WORK_DIR ]
+then
+    mkdir -p $BATCH_WORK_DIR
+else
+    # check if there are any existing batch files
+
+fi
+
+if [ "$WORKFLOW" = "ALL" ]; then
+    {
+        run_regist_people ${PERSON_GROUP_ID} ${PEOPLE_INPUT_CSV} ${PEOPLE_MASTER_CSV};
+    } 2>&1 | tee ${BATCH_WORK_DIR}/run_regist_people.err
+    {
+        run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${FRAME_URLS_FILE};
+    } 2>&1 | tee ${BATCH_WORK_DIR}/run_gen_frame.err
+    {
+        run_identify_people ${PERSON_GROUP_ID} ${PEOPLE_MASTER_CSV} ${WEBVTT};
+    } 2>&1 | tee ${BATCH_WORK_DIR}/run_identify_people.err
+fi
+if [ "$WORKFLOW" = "REGIST" ]; then
+    run_regist_people ${PERSON_GROUP_ID} ${PEOPLE_INPUT_CSV} ${PEOPLE_MASTER_CSV};
+elif [ "$WORKFLOW" = "GEN_FRAME" ]; then
+    run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${FRAME_URLS_FILE};
+elif [ "$WORKFLOW" = "IDENTIFY" ]; then
+    {
+        run_identify_people ${PERSON_GROUP_ID} ${FRAME_URLS_FILE} ${PEOPLE_MASTER_CSV} ${WEBVTT};
+    } 2>&1 | tee ${BATCH_WORK_DIR}/run_identify_people.err
+else
+    echo "[ERROR] Invalid workflow!!"
+    usage $0
+fi 
+
+exit 0

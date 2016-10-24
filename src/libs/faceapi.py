@@ -289,7 +289,7 @@ class CognitiveServices_FaceAPI:
 
 
 
-if __name__ == '__main__': 
+#if __name__ == '__main__': 
 #    subkey='09883d1138ac485e88386e8e0c50ff3x' 
 #    api = CognitiveServices_FaceAPI(subkey)
 #
@@ -312,4 +312,3 @@ if __name__ == '__main__':
 #    persongroup_id = 'nhkpoc3case5'
 #    url = 'http://yoichika-dev1.japanwest.cloudapp.azure.com/poc/nhk/poc3masterimages2/%E9%AB%98%E5%B1%B1%E4%B8%80%E5%AE%9F%EF%BC%88%E3%81%9F%E3%81%8B%E3%82%84%E3%81%BE%E3%81%8B%E3%81%9A%E3%81%BF%EF%BC%89.jpg'
 #    api.print_identified_persons(persongroup_id, url) 
-

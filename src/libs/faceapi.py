@@ -9,6 +9,25 @@ class CognitiveServices_FaceAPI:
         self.__subkey = subkey
 
 
+    def train_persongroup(self, persongroup_id):
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.__subkey,
+        }
+        params = urllib.urlencode({})
+        REQ_BODY = ''
+        try:
+            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn.request("POST", "/face/v1.0/persongroups/{0}/train?{1}".format(persongroup_id, params),
+                REQ_BODY, headers)
+            response = conn.getresponse()
+            data = response.read()
+            conn.close()
+        except Exception as e:
+            print("[Errno {0}] {1}".format(e.errno, e.strerror))
+        return data
+
+
     def add_face_to_facelist(self,facelist_id, face_url, face_name=''):
         headers = {
             # Request headers
@@ -270,9 +289,13 @@ class CognitiveServices_FaceAPI:
 
 
 
-#if __name__ == '__main__': 
+if __name__ == '__main__': 
 #    subkey='09883d1138ac485e88386e8e0c50ff3x' 
 #    api = CognitiveServices_FaceAPI(subkey)
+#
+#    ### train person group
+#    persongroup_id='testgroup' 
+#    api.train_persongroup(persongroup_id)
 #
 #    ### facelist
 #    # facelist_id='testmaster' 

@@ -5,8 +5,17 @@ expr "$0" : "/.*" > /dev/null || cwd=`(cd "$cwd" && pwd)`
 
 usage() {
     C=$1
-    echo "USAGE: $1 [WORKFLOW] [BATCH_NAME] [PERSON_GROUP_ID] [BATCH_WORK_DIR]"
+    echo "USAGE: $1 [WORKFLOW] [BATCH_NAME] [BATCH_WORK_DIR] [PARAMS]"
     echo "   WORKFLOW : ALL|REGIST_PEOPLE|GEN_FRAME|IDENTIFY"
+    echo "   PARAMS for each workflow"
+    echo "      REGIST_PEOPLE => [PERSON_GROUP_ID] "
+    echo "      ex.  ./run_batch REGIST_PEOPLE mybatch /mybatch-work-dir my_person_group_id"
+    echo "      GEN_FRAME => [VIDEO_FILE]"
+    echo "      ex.  ./run_batch GEN_FRAME mybatch /mybatch-work-dir /myvideo-path/myvideo.mp4"
+    echo "      IDENTIFY => [PERSON_GROUP_ID]"
+    echo "      ex.  ./run_batch IDENTIFY mybatch /mybatch-work-dir my_person_group_id"
+    echo "      ALL => [PERSON_GROUP_ID] [VIDEO_FILE]"
+    echo "      ex.  ./run_batch ALL mybatch /mybatch-work-dir my_person_group_id /myvideo-path/myvideo.mp4"
     exit 1;
 }
 
@@ -17,7 +26,9 @@ run_regist_people(){
     _PERSON_GROUP_ID=$1
     _INPUT_CSV=$2
     _PEOPLE_MASTER_CSV=$3
-    ${cwd}/regist_persons.py ${_PERSON_GROUP_ID} ${_INPUT_CSV} ${_PERSON_GROUP_ID}
+    echo 'Batch REGIST_PEOPLE start ....'
+    ${cwd}/regist_persons.py ${_PERSON_GROUP_ID} ${_INPUT_CSV} ${_PEOPLE_MASTER_CSV}
+    echo 'Batch REGIST_PEOPLE Done!'
 }
 
 #################################################################
@@ -26,21 +37,26 @@ run_regist_people(){
 run_gen_frame () {
     _BATCH_NAME=$1
     _BATCH_OUTPUT_DIR=$2
-    _FRAME_URLS=$3
+    _VIDEO_FILE=$3
+    _FRAME_URLS=$4
 
     _ASSET_NAME=${_BATCH_NAME}
     _AMSMP_THUMB_OUT_FILE="${_BATCH_OUTPUT_DIR}/ASSETINFO.txt"
-    AMS_CONF_FILE=$cwd/ams.config
+    AMS_CONF_FILE=$cwd/ams.conf
     AMSMP_THUMB_PARAM_FILE=$cwd/amsmp-thumbnail-config.json
     AMSMP_BASE_DIR=$cwd/../mediaprocessors/azure-media-processor-java
 
+    echo 'Batch GEN_FRAME start ....'
     cd $AMSMP_BASE_DIR
-    mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -c ${AMS_CONF_FILE}-p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
+    #mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -c ${AMS_CONF_FILE}-p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
+    echo mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -f ${VIDEO_FILE} -c ${AMS_CONF_FILE} -p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
+    #mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -f ${VIDEO_FILE} -c ${AMS_CONF_FILE} -p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
     cd ${cwd}
 
-    _STORAGE_CONTAINER=`cat ASSETINFO.txt |grep StorageUrl |awk -F'/' '{print $4}'`
+    _STORAGE_CONTAINER=`cat ${_AMSMP_THUMB_OUT_FILE} |grep StorageUrl |awk -F'/' '{print $4}'`
 
     ${cwd}/gen_frame_urls.py ${_STORAGE_CONTAINER} ${_FRAME_URLS}
+    echo 'Batch GEN_FRAME Done!'
 }
 
 #################################################################
@@ -51,52 +67,63 @@ run_identify_people() {
     _FRAME_URLS_FILE=$2
     _PEOPLE_MASTER_CSV=$3
     _WEBVTT=$4
+    echo 'Batch IDENTIFY start ....'
     ${cwd}/identify_persons.py ${_PERSON_GROUP_ID} ${_FRAME_URLS_FILE} ${_PEOPLE_MASTER_CSV} ${_WEBVTT}
+    echo 'Batch IDENTIFY Done!'
 }
 
 
 #################################################################
 # main
 #################################################################
-if [ $# -ne 4 ]
+if [ $# -lt 4 ]
 then
     usage $0;
 fi
 
 WORKFLOW=$1
 BATCH_NAME=$2
-PERSON_GROUP_ID=$3
-BATCH_WORK_DIR=$4
+BATCH_WORK_DIR=$3
+PERSON_GROUP_ID=''
+VIDEO_FILE=''
+
+BATCH_WORK_DIR=$(cd $(dirname ${BATCH_WORK_DIR}) && pwd)/$(basename ${BATCH_WORK_DIR})
 
 PEOPLE_INPUT_CSV="${BATCH_WORK_DIR}/peopleinput.csv"
 PEOPLE_MASTER_CSV="${BATCH_WORK_DIR}/peoplemaster.csv"
 FRAME_URLS_FILE="${BATCH_WORK_DIR}/frameurls.txt"
-WEBVTT="${BATCH_WORK_DIR}/{BATCH_NAME}.vtt"
+WEBVTT="${BATCH_WORK_DIR}/${BATCH_NAME}.vtt"
 
 if [ ! -e $BATCH_WORK_DIR ]
 then
     mkdir -p $BATCH_WORK_DIR
-else
-    # check if there are any existing batch files
-
 fi
 
 if [ "$WORKFLOW" = "ALL" ]; then
+    if [ $# -ne 5 ]
+    then
+        usage $0;
+    fi
+    PERSON_GROUP_ID=$4
+    VIDEO_FILE=$(cd $(dirname $5) && pwd)/$(basename $5)
     {
         run_regist_people ${PERSON_GROUP_ID} ${PEOPLE_INPUT_CSV} ${PEOPLE_MASTER_CSV};
     } 2>&1 | tee ${BATCH_WORK_DIR}/run_regist_people.err
     {
-        run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${FRAME_URLS_FILE};
+        run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${VIDEO_FILE} ${FRAME_URLS_FILE};
     } 2>&1 | tee ${BATCH_WORK_DIR}/run_gen_frame.err
     {
         run_identify_people ${PERSON_GROUP_ID} ${PEOPLE_MASTER_CSV} ${WEBVTT};
     } 2>&1 | tee ${BATCH_WORK_DIR}/run_identify_people.err
 fi
-if [ "$WORKFLOW" = "REGIST" ]; then
+if [ "$WORKFLOW" = "REGIST_PEOPLE" ]; then
+    PERSON_GROUP_ID=$4
     run_regist_people ${PERSON_GROUP_ID} ${PEOPLE_INPUT_CSV} ${PEOPLE_MASTER_CSV};
 elif [ "$WORKFLOW" = "GEN_FRAME" ]; then
-    run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${FRAME_URLS_FILE};
+    VIDEO_FILE=$(cd $(dirname $4) && pwd)/$(basename $4)
+    run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${VIDEO_FILE} ${FRAME_URLS_FILE};
 elif [ "$WORKFLOW" = "IDENTIFY" ]; then
+    PERSON_GROUP_ID=$4
     {
         run_identify_people ${PERSON_GROUP_ID} ${FRAME_URLS_FILE} ${PEOPLE_MASTER_CSV} ${WEBVTT};
     } 2>&1 | tee ${BATCH_WORK_DIR}/run_identify_people.err

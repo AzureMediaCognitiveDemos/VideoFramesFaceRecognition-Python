@@ -74,3 +74,7 @@ if __name__ == '__main__':
                 print "ERR: failed to added face_url:{0} to person:{1}".format(face_url,person_name)
                 continue
     wf.close
+    
+    # train
+    api.train_persongroup(persongroup_id)
+

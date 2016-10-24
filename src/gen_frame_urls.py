@@ -33,6 +33,7 @@ if __name__ == '__main__':
         wf = open(out_frameurls, 'w')
         api = storage.BlobStorageContainer(
                 config["ACCOUNT_NAME"],config["ACCOUNT_KEY"],container_name)
+        api.set_container_acl_public()
         frame_image_blobs = api.get_blobs_list('jpg')
         for frame_image in frame_image_blobs:
             line = "http://{0}.blob.core.windows.net/{1}/{2}\n".format(

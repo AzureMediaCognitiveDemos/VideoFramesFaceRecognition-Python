@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Azure Media Cognitive Demo: Video Frames Face Recognition">
+    <meta name="author" content="Yoichi Kawasaki">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Azure Meida Analytics - Face Detection/API</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="dist/design.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Azure Media Cognitive Demo: Video Frames Face Recognition</a>
+        </div>
+      </div>
+    </nav>
+
+    <br>
+    <br>
+    <div class="container">
+
+        <div class="colmask doublepage">
+
+            <div class="colleft">
+                <div class="col1">
+                    <!-- Column 1 start -->
+                    <center><h3>Video and Closed Caption</h3></center>
+                    <video id="Video1" controls autoplay width=600>
+                        <source src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/The_Members_Introduction_Of_Nogizaka46_46_opv_46.mp4" srclang="ja" type="video/mp4">
+                        <track id="trackJA"  src="nogizaka46.vtt"  kind="captions" srclang="ja" label="Japanese" default>
+                    </video>
+                    <!-- Column 1 end -->
+            </div>
+
+            <div class="col2">
+                <!-- Column 2 start -->
+                <center><h3>People Master</h3></center>
+                <center>
+<div class="scrollbox">
+
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/中元日芽香（なかもとひめか）.jpg" width="80">
+        <br><b>中元日芽香（なかもとひめか）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/中田花奈（なかだかな）.jpg" width="80">
+        <br><b>中田花奈（なかだかな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/井上小百合（いのうえさゆり）.jpg" width="80">
+        <br><b>井上小百合（いのうえさゆり）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/伊藤かりん（いとうかりん）.jpg" width="80">
+        <br><b>伊藤かりん（いとうかりん）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/伊藤万理華（いとうまりか）.jpg" width="80">
+        <br><b>伊藤万理華（いとうまりか）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/伊藤寧々（いとうねね）.jpg" width="80">
+        <br><b>伊藤寧々（いとうねね）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/伊藤純奈（いとうじゅんな）.jpg" width="80">
+        <br><b>伊藤純奈（いとうじゅんな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/佐々木琴子（ささきことこ）.jpg" width="80">
+        <br><b>佐々木琴子（ささきことこ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/北野日奈子（きたのひなこ）.jpg" width="80">
+        <br><b>北野日奈子（きたのひなこ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/和田まあや（わだまあや）.jpg" width="80">
+        <br><b>和田まあや（わだまあや）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/堀未央奈（ほりみおな）.jpg" width="80">
+        <br><b>堀未央奈（ほりみおな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/大和里菜（やまとりな）.jpg" width="80">
+        <br><b>大和里菜（やまとりな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/寺田蘭世（てらだらんぜ）.jpg" width="80">
+        <br><b>寺田蘭世（てらだらんぜ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/山﨑怜奈（やまざきれな）.jpg" width="80">
+        <br><b>山﨑怜奈（やまざきれな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/川後陽菜（かわごひな）.jpg" width="80">
+        <br><b>川後陽菜（かわごひな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/川村真洋（かわむらまひろ）.jpg" width="80">
+        <br><b>川村真洋（かわむらまひろ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/斉藤優里（さいとうゆうり）.jpg" width="80">
+        <br><b>斉藤優里（さいとうゆうり）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/斎藤ちはる（さいとうちはる）.jpg" width="80">
+        <br><b>斎藤ちはる（さいとうちはる）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/新内眞衣（しんうちまい）.jpg" width="80">
+        <br><b>新内眞衣（しんうちまい）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/星野みなみ（ほしのみなみ）.jpg" width="80">
+        <br><b>星野みなみ（ほしのみなみ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/松井玲奈（まついれな）.jpg" width="80">
+        <br><b>松井玲奈（まついれな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/松村沙友理（まつむらさゆり）.jpg" width="80">
+        <br><b>松村沙友理（まつむらさゆり）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/桜井玲香（さくらいれいか）.jpg" width="80">
+        <br><b>桜井玲香（さくらいれいか）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/樋口日奈（ひぐちひな）.jpg" width="80">
+        <br><b>樋口日奈（ひぐちひな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/橋本奈々未（はしもとななみ）.jpg" width="80">
+        <br><b>橋本奈々未（はしもとななみ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/永島聖羅（ながしませいら）.jpg" width="80">
+        <br><b>永島聖羅（ながしませいら）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/深川麻衣（ふかがわまい）.jpg" width="80">
+        <br><b>深川麻衣（ふかがわまい）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/渡辺みり愛（わたなべみりあ）.jpg" width="80">
+        <br><b>渡辺みり愛（わたなべみりあ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/生田絵梨花（いくたえりか）.jpg" width="80">
+        <br><b>生田絵梨花（いくたえりか）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/生駒里奈（いこまりな）.jpg" width="80">
+        <br><b>生駒里奈（いこまりな）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/畠中清羅（はたｂなかせいら）.jpg" width="80">
+        <br><b>畠中清羅（はたｂなかせいら）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/白石麻衣（しらいしまい）.jpg" width="80">
+        <br><b>白石麻衣（しらいしまい）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/相楽伊織（さがらいおり）.jpg" width="80">
+        <br><b>相楽伊織（さがらいおり）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/矢田里沙子（やだりさこ）.jpg" width="80">
+        <br><b>矢田里沙子（やだりさこ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/秋元真夏（あきもとまなつ）.jpg" width="80">
+        <br><b>秋元真夏（あきもとまなつ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/米徳京花（よねとくきょうか）.jpg" width="80">
+        <br><b>米徳京花（よねとくきょうか）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/能條愛未（のうじょうあみ）.jpg" width="80">
+        <br><b>能條愛未（のうじょうあみ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/若月佑美（わかつきゆみ）.jpg" width="80">
+        <br><b>若月佑美（わかつきゆみ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/衛藤美彩（えとうみさ）.jpg" width="80">
+        <br><b>衛藤美彩（えとうみさ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/西野七瀬（にしのななせ）.jpg" width="80">
+        <br><b>西野七瀬（にしのななせ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/鈴木絢音（すずきあやね）.jpg" width="80">
+        <br><b>鈴木絢音（すずきあやね）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/高山一実（たかやまかずみ）.jpg" width="80">
+        <br><b>高山一実（たかやまかずみ）</b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/齋藤飛鳥（さいとうあすか）.jpg" width="80">
+        <br><b>齋藤飛鳥（さいとうあすか）</b>
+    </div>
+</div>
+
+</div>  <!-- scrollbox -->               
+
+                </center>
+                <!-- Column 2 end -->
+            </div>
+
+        </div> <!-- colleft -->
+
+
+    </div><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

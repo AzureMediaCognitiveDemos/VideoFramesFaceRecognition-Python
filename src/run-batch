@@ -78,6 +78,7 @@ run_identify_people() {
     ${cwd}/identify_persons.py ${_PERSON_GROUP_ID} ${_FRAME_URLS_FILE} ${_PEOPLE_MASTER_CSV} ${_WEBVTT}
     echo "Set Azure Storage Container ACL Private: ${_STORAGE_CONTAINER}"
     ${cwd}/set_storage_acl.py ${_STORAGE_CONTAINER} 0
+    echo "Webvtt file was generated!: ${_WEBVTT}"
     echo 'Batch IDENTIFY Done!'
 }
 

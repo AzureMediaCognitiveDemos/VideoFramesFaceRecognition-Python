@@ -52,17 +52,16 @@ usage: ./run-batch [WORKFLOW] [BATCH_NAME] [BATCH_WORK_DIR] [PARAMS]
 This program generates webvtt file from your video and people master 
 that you register leveraging Azure Media Services and Cognitive Services
 
-WORKFLOW:    ALL|REGIST_PEOPLE|GEN_FRAME|IDENTIFY
+WORKFLOW:  ALL|REGIST_PEOPLE|GEN_FRAME|IDENTIFY
 PARAMS for each WORKFLOW:
-      REGIST_PEOPLE => [PERSON_GROUP_ID]
-          ex)  ./run_batch REGIST_PEOPLE mybatch /mybatch-work-dir my_person_group_id
-      GEN_FRAME => [VIDEO_FILE]
-          ex)  ./run_batch GEN_FRAME mybatch /mybatch-work-dir /myvideo-path/myvideo.mp4
-      IDENTIFY => [PERSON_GROUP_ID]
-          ex)  ./run_batch IDENTIFY mybatch /mybatch-work-dir my_person_group_id
-      or
-      ALL => [PERSON_GROUP_ID] [VIDEO_FILE]
-          ex)  ./run_batch ALL mybatch /mybatch-work-dir my_person_group_id /myvideo-path/myvideo.mp4
+  REGIST_PEOPLE => [PERSON_GROUP_ID]
+    ex)  ./run_batch REGIST_PEOPLE mybatch /mybatch-work-dir my_person_group_id
+  GEN_FRAME => [VIDEO_FILE]
+    ex)  ./run_batch GEN_FRAME mybatch /mybatch-work-dir /myvideo-path/myvideo.mp4
+  IDENTIFY => [PERSON_GROUP_ID]
+    ex)  ./run_batch IDENTIFY mybatch /mybatch-work-dir my_person_group_id
+  ALL => [PERSON_GROUP_ID] [VIDEO_FILE]
+    ex)  ./run_batch ALL mybatch /mybatch-work-dir my_person_group_id /myvideo-path/myvideo.mp4
 ```
 
 ### Example1: Run all workflows

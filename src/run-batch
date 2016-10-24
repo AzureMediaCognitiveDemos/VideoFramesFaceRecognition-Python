@@ -5,17 +5,20 @@ expr "$0" : "/.*" > /dev/null || cwd=`(cd "$cwd" && pwd)`
 
 usage() {
     C=$1
-    echo "USAGE: $1 [WORKFLOW] [BATCH_NAME] [BATCH_WORK_DIR] [PARAMS]"
-    echo "   WORKFLOW : ALL|REGIST_PEOPLE|GEN_FRAME|IDENTIFY"
-    echo "   PARAMS for each workflow"
+    echo "usage: $1 [WORKFLOW] [BATCH_NAME] [BATCH_WORK_DIR] [PARAMS]"
+    echo "This program generates webvtt file from your video and people master that you register leveraging Azure Media Services and Cognitive Services"
+    echo ""
+    echo "WORKFLOW:    ALL|REGIST_PEOPLE|GEN_FRAME|IDENTIFY"
+    echo "PARAMS for each WORKFLOW:"
     echo "      REGIST_PEOPLE => [PERSON_GROUP_ID] "
-    echo "      ex.  ./run_batch REGIST_PEOPLE mybatch /mybatch-work-dir my_person_group_id"
+    echo "          ex)  ./run_batch REGIST_PEOPLE mybatch /mybatch-work-dir my_person_group_id"
     echo "      GEN_FRAME => [VIDEO_FILE]"
-    echo "      ex.  ./run_batch GEN_FRAME mybatch /mybatch-work-dir /myvideo-path/myvideo.mp4"
+    echo "          ex)  ./run_batch GEN_FRAME mybatch /mybatch-work-dir /myvideo-path/myvideo.mp4"
     echo "      IDENTIFY => [PERSON_GROUP_ID]"
-    echo "      ex.  ./run_batch IDENTIFY mybatch /mybatch-work-dir my_person_group_id"
+    echo "          ex)  ./run_batch IDENTIFY mybatch /mybatch-work-dir my_person_group_id"
+    echo "      or"
     echo "      ALL => [PERSON_GROUP_ID] [VIDEO_FILE]"
-    echo "      ex.  ./run_batch ALL mybatch /mybatch-work-dir my_person_group_id /myvideo-path/myvideo.mp4"
+    echo "          ex)  ./run_batch ALL mybatch /mybatch-work-dir my_person_group_id /myvideo-path/myvideo.mp4"
     exit 1;
 }
 
@@ -48,9 +51,8 @@ run_gen_frame () {
 
     echo 'Batch GEN_FRAME start ....'
     cd $AMSMP_BASE_DIR
-    #mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -c ${AMS_CONF_FILE}-p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
     echo mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -f ${VIDEO_FILE} -c ${AMS_CONF_FILE} -p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
-    #mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -f ${VIDEO_FILE} -c ${AMS_CONF_FILE} -p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
+    mvn exec:java -Dexec.args="-t 1 -a ${_ASSET_NAME} -f ${VIDEO_FILE} -c ${AMS_CONF_FILE} -p ${AMSMP_THUMB_PARAM_FILE} -o ${_BATCH_OUTPUT_DIR} -d false"
     cd ${cwd}
 
     _STORAGE_CONTAINER=`cat ${_AMSMP_THUMB_OUT_FILE} |grep StorageUrl |awk -F'/' '{print $4}'`
@@ -64,11 +66,18 @@ run_gen_frame () {
 #################################################################
 run_identify_people() {
     _PERSON_GROUP_ID=$1
-    _FRAME_URLS_FILE=$2
-    _PEOPLE_MASTER_CSV=$3
-    _WEBVTT=$4
+    _BATCH_OUTPUT_DIR=$2
+    _FRAME_URLS_FILE=$3
+    _PEOPLE_MASTER_CSV=$4
+    _WEBVTT=$5
+    _AMSMP_THUMB_OUT_FILE="${_BATCH_OUTPUT_DIR}/ASSETINFO.txt"
+    _STORAGE_CONTAINER=`cat ${_AMSMP_THUMB_OUT_FILE} |grep StorageUrl |awk -F'/' '{print $4}'`
     echo 'Batch IDENTIFY start ....'
+    echo 'Set Azure Storage Container ACL Public: ${_STORAGE_CONTAINER}'
+    ${cwd}/set_storage_acl.py ${_STORAGE_CONTAINER} 1
     ${cwd}/identify_persons.py ${_PERSON_GROUP_ID} ${_FRAME_URLS_FILE} ${_PEOPLE_MASTER_CSV} ${_WEBVTT}
+    echo 'Set Azure Storage Container ACL Private: ${_STORAGE_CONTAINER}'
+    ${cwd}/set_storage_acl.py ${_STORAGE_CONTAINER} 0
     echo 'Batch IDENTIFY Done!'
 }
 
@@ -113,19 +122,23 @@ if [ "$WORKFLOW" = "ALL" ]; then
         run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${VIDEO_FILE} ${FRAME_URLS_FILE};
     } 2>&1 | tee ${BATCH_WORK_DIR}/run_gen_frame.err
     {
-        run_identify_people ${PERSON_GROUP_ID} ${PEOPLE_MASTER_CSV} ${WEBVTT};
+        run_identify_people ${PERSON_GROUP_ID} ${BATCH_WORK_DIR} ${FRAME_URLS_FILE} ${PEOPLE_MASTER_CSV} ${WEBVTT};
     } 2>&1 | tee ${BATCH_WORK_DIR}/run_identify_people.err
 fi
 if [ "$WORKFLOW" = "REGIST_PEOPLE" ]; then
     PERSON_GROUP_ID=$4
-    run_regist_people ${PERSON_GROUP_ID} ${PEOPLE_INPUT_CSV} ${PEOPLE_MASTER_CSV};
+    {
+        run_regist_people ${PERSON_GROUP_ID} ${PEOPLE_INPUT_CSV} ${PEOPLE_MASTER_CSV};
+    } 2>&1 | tee ${BATCH_WORK_DIR}/run_regist_people.err
 elif [ "$WORKFLOW" = "GEN_FRAME" ]; then
     VIDEO_FILE=$(cd $(dirname $4) && pwd)/$(basename $4)
-    run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${VIDEO_FILE} ${FRAME_URLS_FILE};
+    {
+        run_gen_frame ${BATCH_NAME} ${BATCH_WORK_DIR} ${VIDEO_FILE} ${FRAME_URLS_FILE};
+    } 2>&1 | tee ${BATCH_WORK_DIR}/run_gen_frame.err
 elif [ "$WORKFLOW" = "IDENTIFY" ]; then
     PERSON_GROUP_ID=$4
     {
-        run_identify_people ${PERSON_GROUP_ID} ${FRAME_URLS_FILE} ${PEOPLE_MASTER_CSV} ${WEBVTT};
+        run_identify_people ${PERSON_GROUP_ID} ${BATCH_WORK_DIR} ${FRAME_URLS_FILE} ${PEOPLE_MASTER_CSV} ${WEBVTT};
     } 2>&1 | tee ${BATCH_WORK_DIR}/run_identify_people.err
 else
     echo "[ERROR] Invalid workflow!!"

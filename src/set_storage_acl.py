@@ -13,7 +13,8 @@ from libs import config
 config_file = 'storage.conf'
 
 def usage(c):
-    print 'Usage: # python %s <storage_container> <urlsfile:out>' % c
+    print 'Usage: # python %s <storage_container> <acl:0/1>' % c
+    print '         acl: 0 - private, 1 - public'
 
 if __name__ == '__main__':
     # add python running path
@@ -26,21 +27,18 @@ if __name__ == '__main__':
         usage(argvs[0])
         quit()
     container_name = argvs[1]
-    out_frameurls = argvs[2]
-
+    acl = argvs[2]
+    if acl != 0 and acl !=1:
+        usage(argvs[0])
+        quit()
+        
     config = config.read_config(config_file)
     try:
-        wf = open(out_frameurls, 'w')
         api = storage.BlobStorageContainer(
                 config["ACCOUNT_NAME"],config["ACCOUNT_KEY"],container_name)
-        frame_image_blobs = api.get_blobs_list('jpg')
-        for frame_image in frame_image_blobs:
-            line = "http://{0}.blob.core.windows.net/{1}/{2}\n".format(
-                        config["ACCOUNT_NAME"], container_name, frame_image)
-            wf.write(line)
-    except IOError:
-        print('Cannot Open {}'.format(out_frameurls))
+        if acl == 1:
+            api.set_container_acl_public()
+        else:
+            api.set_container_acl_private()
     except Exception as e:
         print ("Exception occurd during storage api execution!")
-    else:
-        wf.close

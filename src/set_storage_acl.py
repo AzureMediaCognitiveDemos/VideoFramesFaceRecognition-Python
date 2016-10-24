@@ -27,7 +27,7 @@ if __name__ == '__main__':
         usage(argvs[0])
         quit()
     container_name = argvs[1]
-    acl = argvs[2]
+    acl = int(argvs[2])
     if acl != 0 and acl !=1:
         usage(argvs[0])
         quit()

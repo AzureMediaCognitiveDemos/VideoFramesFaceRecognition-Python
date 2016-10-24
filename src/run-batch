@@ -73,10 +73,10 @@ run_identify_people() {
     _AMSMP_THUMB_OUT_FILE="${_BATCH_OUTPUT_DIR}/ASSETINFO.txt"
     _STORAGE_CONTAINER=`cat ${_AMSMP_THUMB_OUT_FILE} |grep StorageUrl |awk -F'/' '{print $4}'`
     echo 'Batch IDENTIFY start ....'
-    echo 'Set Azure Storage Container ACL Public: ${_STORAGE_CONTAINER}'
+    echo "Set Azure Storage Container ACL Public: ${_STORAGE_CONTAINER}"
     ${cwd}/set_storage_acl.py ${_STORAGE_CONTAINER} 1
     ${cwd}/identify_persons.py ${_PERSON_GROUP_ID} ${_FRAME_URLS_FILE} ${_PEOPLE_MASTER_CSV} ${_WEBVTT}
-    echo 'Set Azure Storage Container ACL Private: ${_STORAGE_CONTAINER}'
+    echo "Set Azure Storage Container ACL Private: ${_STORAGE_CONTAINER}"
     ${cwd}/set_storage_acl.py ${_STORAGE_CONTAINER} 0
     echo 'Batch IDENTIFY Done!'
 }

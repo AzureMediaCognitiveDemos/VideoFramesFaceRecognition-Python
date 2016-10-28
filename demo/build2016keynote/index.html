@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Azure Media Cognitive Demo: Video Frames Face Recognition">
+    <meta name="author" content="Yoichi Kawasaki">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Azure Media Cognitive Demo: Video Summarization and Face Recognition</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="dist/design.css" rel="stylesheet">
+    <script type="text/javascript">
+
+    function restart(value) {
+        var video = document.getElementById("Video1");
+        video.currentTime = value;
+    }
+    </script>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Azure Media Cognitive Demo: Video Summarization and Face Recognition</a>
+        </div>
+      </div>
+    </nav>
+
+    <br>
+    <br>
+    <div class="container">
+
+        <div class="colmask doublepage">
+
+            <div class="colleft">
+                <div class="col1">
+                    <!-- Column 1 start -->
+                    <center><h3>Video and Closed Caption</h3></center>
+                    <video id="Video1" controls autoplay width=600>
+                        <source src="http://yoichikademo.blob.core.windows.net/build2016keynote/KEY01_VideoThumbnail.mp4" srclang="ja" type="video/mp4">
+                        <track id="trackJA"  src="build2016keynote.vtt"  kind="captions" srclang="ja" label="Person Name" default>
+                    </video>
+                    <br>
+                    <br>
+                    <h4>Key technologies and features:</h4>
+                    <ul>
+                    <li><b>Video Summarization</b>: The video above is summarized version of Build 2016 Keynote. The summarization was made by using <a href="https://azure.microsoft.com/en-us/documentation/articles/media-services-video-summarization/">Azure Media Video Thumbnails media processor (MP)</a>. Original video source can be found at <a href="https://channel9.msdn.com/Events/Build/2016/KEY01">Channel9</a></li>
+                    <li><b>Face detection and Identification</b>: Speakers' names are displayed on the video closed caption above as the speakers acutally appear, which is achieved basically by the following steps - (1) registering speakers' faces in <a href="https://www.microsoft.com/cognitive-services/en-us/face-api">Cognitive Services' Face API</a> beforehandin, (2) tuning video frames into thumbnails by using Azure Media Services' <a href="https://azure.microsoft.com/en-us/documentation/articles/media-services-dotnet-generate-thumbnail-with-mes/">Media Encorder Standard</a>, and (3) detecting and identifying speakers' faces by using <a href="https://www.microsoft.com/cognitive-services/en-us/face-api">Cognitive Servcies Face API</a></li>
+                    <li><b>Jumping to a scene</b>: You can jump to a scene where a speaker in the right column initially appears by clicking the name of speaker's face</li>
+                    </ul>
+                    Source Code: <a href="https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition">https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition</a>
+
+                    <!-- Column 1 end -->
+            </div>
+
+            <div class="col2">
+                <!-- Column 2 start -->
+                <center><h3>Speakers' faces</h3></center>
+                <center>
+<div class="scrollbox">
+
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Alex_Kipman1.jpg" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('104');">Alex Kipman</a></b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Bryan_Roper1.jpg" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('26');">Bryan Roper</a></b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Kevin_Gallo1.png" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('58');">Kevin Gallo</a></b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Lilian_Rincon1.jpg" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('145');">Lilian Rincon</a></b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Marcus_Ash1.jpg" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('133');">Marcus Ash</a></b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Phil_Spencer1.jpg" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('78');">Phil Spencer</a></b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Satya_Nadella1.jpg" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('1');">Satya Nadella</a></b>
+    </div>
+</div>
+<div class="col-md-4" style="text-align:center">
+    <div style="height:150px">
+        <img src="http://yoichikademo.blob.core.windows.net/build2016keynote/Terry_Myerson1.jpg" width="80">
+        <br><b><a href="#" id="hoge" onclick="restart('37');">Terry Myerson</a></b>
+    </div>
+</div>
+
+
+
+
+
+
+
+</div>  <!-- scrollbox -->               
+
+                </center>
+                <!-- Column 2 end -->
+            </div>
+
+        </div> <!-- colleft -->
+
+
+    </div><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

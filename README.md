@@ -22,9 +22,9 @@ You have to create the following Azure services accounts and configure the files
 ./cogutils/create_persongroup.sh <personGroupId> <groupName>
 ```
 
-For example, suppose personGroupId is 'demo_nogizaka46', and groupName is 'DEMO NOGIZAKA46', the command is like this:
+For example, suppose personGroupId is 'build2016keynote', and groupName is 'DEMO Build 2016 Keynote', the command is like this:
 ```
-./cogutils/create_persongroup.sh demo_nogizaka46 'DEMO NOGIZAKA46'
+./cogutils/create_persongroup.sh build2016keynote 'DEMO Build 2016 Keynote'
 ```
 
 ### 1-3. Create peopleinput.csv
@@ -38,6 +38,8 @@ The format of peopleinput.csv is
 | http://imgserver.com/face2.jpg | facename2 | 1                 |
 | ...                            | ...       | 1                 |
 | http://imgserver.com/faceN.jpg | facenameN | 0                 |
+
+See sample [peopleinput.csv](https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition/blob/master/demo/build2016keynote/peopleinput.csv) 
 
 
 ### 1-4. Setup Azure Media Processors Modules
@@ -69,7 +71,7 @@ PARAMS for each WORKFLOW:
 
 ### Example1: Run all workflows
 ```
-./run-batch ALL nogizaka46 ../demo/nogizaka46 demo_nogizaka46 
+./run-batch ALL build2016keynote ../demo/build2016keynote demo_build2016keynote
 ```
 
 
@@ -77,12 +79,16 @@ PARAMS for each WORKFLOW:
 
 ```
 # regist people faces example
-./run-batch REGIST_PEOPLE nogizaka46 demo_nogizaka46 ../demo/nogizaka46
+./run-batch REGIST_PEOPLE nogizaka46 demo_build2016keynote ../demo/build2016keynote
 
 # generate frames
-./run-batch GEN_FRAME nogizaka46 ../demo/nogizaka46 ../demo/nogizaka46/videos/nogizaka46.mp4
+./run-batch GEN_FRAME build2016keynote ../demo/build2016keynote ../demo/build2016keynote/videos/build2016keynote.mp4
 
 # identify
-./run-batch IDENTIFY nogizaka46 ../demo/nogizaka46 demo_nogizaka46 
+./run-batch IDENTIFY build2016keynote ../demo/build2016keynote demo_build2016keynote
 ```
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition.
 

@@ -3,6 +3,8 @@ Video Frames Face Recognition Samples
 
 ![Screenshot build 2016 Keynote](https://raw.githubusercontent.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition/master/img/screenshot-build2016keynote.jpg)
 
+[demo site] [http://aka.ms/amcdemo_videoface](http://aka.ms/amcdemo_videoface)
+
 ## 1. Preparation
 
 ### 1-1. Configurations for Azure Services

@@ -1,6 +1,7 @@
 # VideoFramesFaceRecognition
 Video Frames Face Recognition Samples
 
+![Screenshot build 2016 Keynote](https://raw.githubusercontent.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition/master/img/screenshot-build2016keynote.jpg)
 
 ## 1. Preparation
 

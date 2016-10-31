@@ -1,7 +1,7 @@
 # VideoFramesFaceRecognition
 Video Frames Face Recognition Samples
 
-![Screenshot build 2016 Keynote](https://raw.githubusercontent.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition/master/img/screenshot-build2016keynote.jpg)
+![Screenshot build 2016 Keynote](https://raw.githubusercontent.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition-Python/master/img/screenshot-build2016keynote.jpg)
 
 Demo: [http://aka.ms/amcdemo_videoface](http://aka.ms/amcdemo_videoface)
 
@@ -90,5 +90,5 @@ PARAMS for each WORKFLOW:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition.
+Bug reports and pull requests are welcome on GitHub at https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition-Python.
 

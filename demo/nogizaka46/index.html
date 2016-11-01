@@ -41,6 +41,14 @@
                         <source src="http://yoichikademo.blob.core.windows.net/facelist-nogizaka46/The_Members_Introduction_Of_Nogizaka46_46_opv_46.mp4" srclang="ja" type="video/mp4">
                         <track id="trackJA"  src="nogizaka46.vtt"  kind="captions" srclang="ja" label="Japanese" default>
                     </video>
+                    <br>
+                    <br>
+                    <h4>Key technologies and features:</h4>
+                    <ul>
+                    <li><b>Face detection and Identification</b>: Speakers' names are displayed on the video closed caption above as the speakers acutally appear, which is achieved basically by the following steps - (1) registering speakers' faces in <a href="https://www.microsoft.com/cognitive-services/en-us/face-api">Cognitive Services' Face API</a> beforehandin, (2) tuning video frames into thumbnails by using Azure Media Services' <a href="https://azure.microsoft.com/en-us/documentation/articles/media-services-dotnet-generate-thumbnail-with-mes/">Media Encorder Standard</a>, and (3) detecting and identifying speakers' faces by using <a href="https://www.microsoft.com/cognitive-services/en-us/face-api">Cognitive Servcies Face API</a></li>
+                    </ul>
+                    Source Code: <a href="https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition-Python">https://github.com/AzureMediaCognitiveDemos/VideoFramesFaceRecognition-Python</a>
+
                     <!-- Column 1 end -->
             </div>
 

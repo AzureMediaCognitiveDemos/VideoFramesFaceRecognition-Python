@@ -7,7 +7,7 @@ expr "$0" : "/.*" > /dev/null || cwd=`(cd "$cwd" && pwd)`
 START=0
 TOP=1000
 
-URL="https://api.projectoxford.ai/face/v1.0/persongroups?start=$START&top=$TOP"
+URL="https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups?start=$START&top=$TOP"
 
 {
 curl -s \

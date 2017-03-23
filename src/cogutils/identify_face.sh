@@ -4,7 +4,7 @@ cwd=`dirname "$0"`
 expr "$0" : "/.*" > /dev/null || cwd=`(cd "$cwd" && pwd)`
 . $cwd/../cognitive.conf
 
-URL="https://api.projectoxford.ai/face/v1.0/identify"
+URL="https://westus.api.cognitive.microsoft.com/face/v1.0/identify"
 
 if [ $# -ne 2 ]
 then

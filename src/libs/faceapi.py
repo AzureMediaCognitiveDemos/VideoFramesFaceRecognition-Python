@@ -17,7 +17,7 @@ class CognitiveServices_FaceAPI:
         params = urllib.urlencode({})
         REQ_BODY = ''
         try:
-            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
             conn.request("POST", "/face/v1.0/persongroups/{0}/train?{1}".format(persongroup_id, params),
                 REQ_BODY, headers)
             response = conn.getresponse()
@@ -43,7 +43,7 @@ class CognitiveServices_FaceAPI:
 
         data = ''
         try:
-            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
             conn.request("POST",
                 "/face/v1.0/facelists/{0}/persistedFaces?{1}".format(facelist_id,params), 
                 ADDFACE_REQ_BODY, headers)
@@ -79,7 +79,7 @@ class CognitiveServices_FaceAPI:
         DETECT_REQ_BODY = json.dumps( {"url":face_url}  )
         data = ''
         try:
-            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
             conn.request("POST", "/face/v1.0/detect?%s" %
                             params, DETECT_REQ_BODY, headers)
             response = conn.getresponse()
@@ -116,7 +116,7 @@ class CognitiveServices_FaceAPI:
                     )
             data = ''
             try:
-                conn = httplib.HTTPSConnection('api.projectoxford.ai')
+                conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
                 conn.request("POST", "/face/v1.0/findsimilars?%s" %
                                 params, FINDSIMILAR_REQ_BODY, headers)
                 response = conn.getresponse()
@@ -158,7 +158,7 @@ class CognitiveServices_FaceAPI:
         REQ_BODY = json.dumps({"name":person_name}) 
         data = ''
         try:
-            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
             conn.request("POST",
                 "/face/v1.0/persongroups/{0}/persons?{1}".format(persongroup_id,params), 
                 REQ_BODY, headers)
@@ -184,7 +184,7 @@ class CognitiveServices_FaceAPI:
         params = urllib.urlencode({})
         REQ_BODY=''
         try:
-            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
             conn.request("GET", 
                 "/face/v1.0/persongroups/{0}/persons/{1}?{2}".format(persongroup_id, person_id, params),
                     REQ_BODY , headers)
@@ -212,7 +212,7 @@ class CognitiveServices_FaceAPI:
         REQ_BODY = json.dumps( {"url":face_url}  ) 
         data = ''
         try:
-            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
             conn.request("POST",
                 "/face/v1.0/persongroups/{0}/persons/{1}/persistedFaces?{2}".format(persongroup_id, person_id, params), 
                 REQ_BODY, headers)
@@ -245,7 +245,7 @@ class CognitiveServices_FaceAPI:
         REQ_BODY= json.dumps(bodies)
         data = ''
         try:
-            conn = httplib.HTTPSConnection('api.projectoxford.ai')
+            conn = httplib.HTTPSConnection('westus.api.cognitive.microsoft.com')
             conn.request("POST", "/face/v1.0/identify?%s" % params, REQ_BODY, headers)
             response = conn.getresponse()
             data = response.read()

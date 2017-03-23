@@ -14,7 +14,7 @@ PERSON_GROUP_ID=$1
 PERSON_ID=$2
 FACE_URL=$3
 
-URL="https://api.projectoxford.ai/face/v1.0/persongroups/$PERSON_GROUP_ID/persons/$PERSON_ID/persistedFaces"
+URL="https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/$PERSON_GROUP_ID/persons/$PERSON_ID/persistedFaces"
 
 curl -s \
  -H "Content-Type: application/json" \

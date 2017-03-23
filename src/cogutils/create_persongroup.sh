@@ -13,7 +13,7 @@ fi
 PERSON_GROUP_ID=$1
 PERSON_GROUP_NAME=$2
 
-URL="https://api.projectoxford.ai/face/v1.0/persongroups/$PERSON_GROUP_ID"
+URL="https://westus.api.cognitive.microsoft.com/face/v1.0/persongroups/$PERSON_GROUP_ID"
 
 curl -s \
  -H "Content-Type: application/json" \

@@ -12,7 +12,7 @@ fi
 
 FACE_URL=$1
 
-URL="https://api.projectoxford.ai/face/v1.0/detect"
+URL="https://westus.api.cognitive.microsoft.com/face/v1.0/detect"
 
 curl -s \
  -H "Content-Type: application/json" \
